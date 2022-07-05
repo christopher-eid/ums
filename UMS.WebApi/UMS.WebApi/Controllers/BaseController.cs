@@ -5,6 +5,6 @@ namespace UMS.WebApi.Controllers;
 
 public class BaseController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    public IMediator _mediator;
     
 }
