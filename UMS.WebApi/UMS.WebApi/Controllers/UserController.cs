@@ -1,3 +1,6 @@
+using Application.User.Commands.AdminCreateCourse;
+using Domain.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UMS.Persistence.Models;
 
@@ -5,11 +8,15 @@ namespace UMS.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class StudentController : ControllerBase
+public class StudentController : BaseController
 {
 
+    public StudentController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
-//should we add controller??
+
 
 
     [HttpGet("GetAllUsers")]
@@ -18,32 +25,36 @@ public class StudentController : ControllerBase
         return "hello";
     }
 
-
-
-
-
-
-    /*private static readonly string[] Summaries = new[]
+    
+    [HttpPost("AdminCreateCourse")]
+    public async Task<IActionResult> Add([FromBody] AdminCreateCourseCommand request)
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        //no need to use automappers here since so sensitive info
+        
+        
+        var result = await _mediator.Send(new AdminCreateCourseCommand
+        {
+           Name = request.Name, 
+           MaxStudentsNumber = request.MaxStudentsNumber,
+           LowerBound = request.LowerBound,
+           UpperBound = request.UpperBound
+        });
 
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
+        return Ok(result);
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+/*  JSON example for testing adminCreateCourse on swagger
+  
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
-    }*/
+  "name": "string",
+  "maxStudentsNumber": 0,
+  "lowerBound":"2019-01-06",
+  "upperBound": "2022-01-06"
+  
+  
+}*/
+
+
+
+    
 }
