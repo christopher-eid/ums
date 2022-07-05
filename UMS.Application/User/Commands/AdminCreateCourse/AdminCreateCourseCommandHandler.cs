@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NpgsqlTypes;
 using UMS.Persistence.Models;
 
@@ -37,8 +38,9 @@ public class AdminCreateCourseCommandHandler : IRequestHandler<AdminCreateCourse
             cfg.CreateMap<Course, CourseDto>()
         );
         
+        
         var mapper = new Mapper(config);
-        CourseDto courseResult = mapper.Map<CourseDto>(newCourse);
+        CourseDto courseResult = mapper.Map<CourseDto>(res.Entity);
         
         return courseResult;
     }
