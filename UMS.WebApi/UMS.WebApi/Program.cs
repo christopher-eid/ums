@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddMediatR(typeof(AdminCreateCourseCommand).GetTypeInfo().Assembly);
 builder.Services.AddTransient<UmsContext>();
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.Load("UMS.Application"));
 
 var app = builder.Build();
 

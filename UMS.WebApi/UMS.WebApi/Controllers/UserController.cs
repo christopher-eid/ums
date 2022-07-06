@@ -1,4 +1,7 @@
 using Application.User.Commands.AdminCreateCourse;
+using Application.User.Commands.TeacherAssignCourseToTime;
+using Application.User.Commands.TeacherCreateTimeSlot;
+using Application.User.Commands.TeacherRegisterCourse;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +22,17 @@ public class StudentController : BaseController
 
 
 
-    [HttpGet("GetAllUsers")]
-    public async Task<string> GetAllUsers()
+    [HttpGet("TestConnection")]
+    public async Task<string> TestConnection()
     {
         return "hello";
     }
 
     
     [HttpPost("AdminCreateCourse")]
-    public async Task<IActionResult> Add([FromBody] AdminCreateCourseCommand request)
+    public async Task<IActionResult> AdminCreateCourse([FromBody] AdminCreateCourseCommand request)
     {
-        //no need to use automappers here since so sensitive info
+       
         
         
         var result = await _mediator.Send(new AdminCreateCourseCommand
@@ -54,7 +57,55 @@ public class StudentController : BaseController
   
 }*/
 
+    [HttpPost("TeacherRegisterCourse")]
+    public async Task<IActionResult> TeacherRegisterCourse([FromBody] TeacherRegisterCourseCommand request)
+    {
+        var result = await _mediator.Send(new TeacherRegisterCourseCommand()
+        {
+            TeacherId = request.TeacherId,
+            CourseId = request.CourseId
+        });
 
+        return Ok(result);
+    }
 
     
+    
+    [HttpPost("TeacherCreateTimeSlot")]
+    public async Task<IActionResult> TeacherCreateTimeSlot([FromBody] TeacherCreateTimeSlotCommand request)
+    {
+        var result = await _mediator.Send(new TeacherCreateTimeSlotCommand()
+        {
+            StartTime = request.StartTime,
+            EndTime = request.EndTime,
+            Duration = request.Duration
+        });
+
+        return Ok(result);
+    }
+    
+    
+    [HttpPost("TeacherAssignCourseToTime")]
+    public async Task<IActionResult> TeacherAssignCourseToTime([FromBody] TeacherAssignCourseToTimeCommand request)
+    {
+        var result = await _mediator.Send(new TeacherAssignCourseToTimeCommand()
+        {
+            TeacherPerCourseId = request.TeacherPerCourseId,
+            SessionTimeId = request.SessionTimeId
+        });
+
+        return Ok(result);
+    }
+
+
+    /* JSON example for testing teacherRegisterCourse on swagger
+{
+  "teacherId": 1,
+  "courseId": 4,
+  "startTime": "2022-07-05T11:50:39",
+  "endTime": "2022-07-05T12:50:39",
+  "duration": 1
+} 
+*/
+
 }
