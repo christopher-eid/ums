@@ -10,10 +10,12 @@ namespace Application.User.Commands.AdminCreateCourse;
 public class AdminCreateCourseCommandHandler : IRequestHandler<AdminCreateCourseCommand,CourseDto >
 {
     private readonly UmsContext _umsContext;
+    private readonly IMapper _mapper;
 
-    public AdminCreateCourseCommandHandler(UmsContext db)
+    public AdminCreateCourseCommandHandler(UmsContext db, IMapper mapper)
     {
         _umsContext = db;
+        _mapper = mapper;
     }
    
 
@@ -21,7 +23,7 @@ public class AdminCreateCourseCommandHandler : IRequestHandler<AdminCreateCourse
     {
         
         //create a npsql range using lower and upper bound entered by admin
-        NpgsqlRange<DateOnly>? enrolmentDateRange = new NpgsqlRange<DateOnly>(request.LowerBound, request.UpperBound);
+        NpgsqlRange<DateOnly>? enrolmentDateRange = new NpgsqlRange<DateOnly>(DateOnly.FromDateTime(request.LowerBound), DateOnly.FromDateTime(request.UpperBound));
         //do not give an id to course since it is auto incremented in database
         Course newCourse = new Course()
         {
@@ -31,17 +33,17 @@ public class AdminCreateCourseCommandHandler : IRequestHandler<AdminCreateCourse
         };
         var res = await _umsContext.Courses.AddAsync(newCourse);
         _umsContext.SaveChanges();
-        
-        
-        //using mapper so we return courseDTO for the user so we do not expose the internal classes we have
-        var config = new MapperConfiguration(cfg =>
-            cfg.CreateMap<Course, CourseDto>()
-        );
-        
-        
-        var mapper = new Mapper(config);
-        CourseDto courseResult = mapper.Map<CourseDto>(res.Entity);
-        
+
+        CourseDto courseResult = new CourseDto()
+        {
+            Id = res.Entity.Id,
+            Name = res.Entity.Name,
+            LowerBound = res.Entity.EnrolmentDateRange.Value.LowerBound.ToDateTime(new TimeOnly()),
+            MaxStudentsNumber = res.Entity.MaxStudentsNumber,
+            UpperBound = res.Entity.EnrolmentDateRange.Value.LowerBound.ToDateTime(new TimeOnly())
+        };
+        // we need to use DateTime when returning the object, not dateOnly,
+        //since DateOnly is specific to .net and other technologies may not have it
         return courseResult;
     }
 }

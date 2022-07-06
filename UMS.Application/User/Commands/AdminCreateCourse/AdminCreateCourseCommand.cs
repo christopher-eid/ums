@@ -9,7 +9,7 @@ public class AdminCreateCourseCommand : IRequest<CourseDto>
     public string? Name { get; set; }
     public int? MaxStudentsNumber { get; set; }
     
-    public DateOnly LowerBound { get; set; }
+    public DateTime LowerBound { get; set; } //use DateTime instead of DateOnly 
     
-    public DateOnly UpperBound { get; set; }
+    public DateTime UpperBound { get; set; }
 }
