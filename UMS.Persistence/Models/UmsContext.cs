@@ -157,8 +157,6 @@ namespace UMS.Persistence.Models
 
                 entity.Property(e => e.Name).HasColumnType("character varying");
 
-                entity.Property(e => e.RoleId).ValueGeneratedOnAdd();
-
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)

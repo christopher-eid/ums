@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Keycloak.Net" Version="1.0.18" />
         <PackageReference Include="MediatR" Version="10.0.1" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -15,6 +16,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\UMS.Application\UMS.Application.csproj" />
       <ProjectReference Include="..\..\UMS.Domain\UMS.Domain.csproj" />
+      <ProjectReference Include="..\..\UMS.Infrastructure\UMS.Infrastructure.csproj" />
       <ProjectReference Include="..\..\UMS.Persistence\UMS.Persistence.csproj" />
     </ItemGroup>
 
