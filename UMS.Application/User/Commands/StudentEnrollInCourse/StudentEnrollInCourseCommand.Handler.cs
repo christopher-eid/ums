@@ -3,6 +3,8 @@ using Application.Models;
 using AutoMapper;
 using Domain.Models;
 using MediatR;
+using UMS.Infrastructure.Abstraction.Interfaces;
+using UMS.Infrastructure.Abstraction.Models;
 using UMS.Persistence.Models;
 
 namespace Application.User.Commands.StudentEnrollInCourse;
@@ -11,11 +13,12 @@ public class StudentEnrollInCourseCommandHandler : IRequestHandler<StudentEnroll
 {
     private readonly UmsContext _umsContext;
     private readonly IMapper _mapper;
-
-    public StudentEnrollInCourseCommandHandler(UmsContext db, IMapper mapper)
+    private readonly IMailService1 _mailService;
+    public StudentEnrollInCourseCommandHandler(UmsContext db, IMapper mapper, IMailService1 mailservice)
     {
         _umsContext = db;
         _mapper = mapper;
+        _mailService = mailservice;
     }
    
 
@@ -54,6 +57,21 @@ public class StudentEnrollInCourseCommandHandler : IRequestHandler<StudentEnroll
         
         _umsContext.SaveChanges();
 
+        var studentInvolved = _umsContext.Users.FirstOrDefault(x => x.Id == res.Entity.StudentId & x.RoleId == 3);
+        var courseInvolved = _umsContext.Courses.FirstOrDefault(x => x.Id == classAndTeacherFound.CourseId);
+        if (studentInvolved != null & courseInvolved != null)
+        {
+            MailRequest c = new MailRequest()
+            {
+                ToEmail = studentInvolved.Email,
+                Subject = courseInvolved.Name,
+                Body = "Welcome to the class!!",
+            };
+            await _mailService.SendEmailAsync(c);
+        }
+
+        
+        
         StudentEnrollInCourseDto response = new StudentEnrollInCourseDto()
         {
             StudentId = res.Entity.StudentId,

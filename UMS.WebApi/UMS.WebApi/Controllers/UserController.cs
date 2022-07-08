@@ -1,12 +1,15 @@
+
 using Application.User.Commands.AdminCreateCourse;
+using Application.User.Commands.SendEmail;
 using Application.User.Commands.StudentEnrollInCourse;
 using Application.User.Commands.TeacherAssignCourseToTime;
 using Application.User.Commands.TeacherCreateTimeSlot;
 using Application.User.Commands.TeacherRegisterCourse;
-using Domain.Models;
+
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UMS.Persistence.Models;
+using UMS.Infrastructure.Abstraction.Interfaces;
+
 
 namespace UMS.WebApi.Controllers;
 
@@ -15,9 +18,10 @@ namespace UMS.WebApi.Controllers;
 public class UserController : BaseController
 {
 
-    public UserController(IMediator mediator)
+    public UserController(IMediator mediator, IMailService1 mailService1)
     {
         _mediator = mediator;
+        _mailService1 = mailService1;
     }
 
 
@@ -78,8 +82,7 @@ public class UserController : BaseController
         var result = await _mediator.Send(new TeacherCreateTimeSlotCommand()
         {
             StartTime = request.StartTime,
-            EndTime = request.EndTime,
-            Duration = request.Duration
+            EndTime = request.EndTime
         });
 
         return Ok(result);
@@ -110,6 +113,34 @@ public class UserController : BaseController
 
         return Ok(result);
     }
+    
+    
+    
+    
+    /*
+    [HttpPost("UserSignUp")]
+    public async Task<IActionResult> UserSignUp(StudentEnrollInCourseCommand request)
+    {
+       Key
+    }
+    */
+    
+    
+    
+    [HttpPost("send")]
+    public async Task<string> SendMail([FromForm] SendEmailCommand request)
+    {
+        
+        var result = await _mediator.Send(new SendEmailCommand()
+        {
+           ToEmail = request.ToEmail,
+           Subject = request.Subject,
+           Body = request.Body
+        });
+
+        return result;
+    }
+    
     
     /* JSON example for testing teacherRegisterCourse on swagger
 {

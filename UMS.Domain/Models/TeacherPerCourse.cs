@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Domain.Models;
-
-namespace UMS.Persistence.Models
+﻿namespace Domain.Models
 {
     public partial class TeacherPerCourse
     {

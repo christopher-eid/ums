@@ -12,8 +12,11 @@
       <PackageReference Include="AutoMapper.Collection" Version="8.0.0" />
       <PackageReference Include="AutoMapper.EF6" Version="2.1.1" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+      <PackageReference Include="MailKit" Version="3.3.0" />
       <PackageReference Include="MediatR" Version="10.0.1" />
       <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+      <PackageReference Include="MimeKit" Version="3.3.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -22,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\UMS.Domain\UMS.Domain.csproj" />
+      <ProjectReference Include="..\UMS.Infrastructure.Abstraction\UMS.Infrastructure.Abstraction.csproj" />
       <ProjectReference Include="..\UMS.Persistence\UMS.Persistence.csproj" />
     </ItemGroup>
 

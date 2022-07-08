@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace UMS.Persistence.Models
+﻿namespace Domain.Models
 {
     public partial class User
     {

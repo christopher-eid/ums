@@ -1,5 +1,4 @@
 ﻿using NpgsqlTypes;
-using UMS.Persistence.Models;
 
 namespace Domain.Models
 {

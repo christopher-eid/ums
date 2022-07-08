@@ -7,6 +7,4 @@ public class TeacherSessionDto : IRequest<TeacherCourseDto>
 {
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
-    
-    public int Duration { get; set; }
 }
