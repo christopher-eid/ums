@@ -2,7 +2,7 @@
 {
     public partial class ClassEnrollment
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public long ClassId { get; set; }
         public long StudentId { get; set; }
 
