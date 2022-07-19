@@ -9,7 +9,7 @@ namespace Domain.Models
             TeacherPerCourses = new HashSet<TeacherPerCourse>();
         }
 
-        public long? Id { get; set; }
+        public long Id { get; set; }
         public string? Name { get; set; }
         public int? MaxStudentsNumber { get; set; }
         public NpgsqlRange<DateOnly>? EnrolmentDateRange { get; set; }

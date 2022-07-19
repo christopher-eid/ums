@@ -2,7 +2,7 @@
 {
     public partial class TeacherPerCoursePerSessionTime
     {
-        public long? Id { get; set; }
+        public long Id { get; set; }
         public long TeacherPerCourseId { get; set; }
         public long SessionTimeId { get; set; }
 
