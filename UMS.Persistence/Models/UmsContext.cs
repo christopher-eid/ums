@@ -120,6 +120,9 @@ namespace UMS.Persistence.Models
             {
                 entity.ToTable("TeacherPerCoursePerSessionTime");
 
+                entity.HasIndex(e => e.Id, "class_id_index")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.Id, "classsessions_id_uindex")
                     .IsUnique();
 

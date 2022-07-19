@@ -57,21 +57,26 @@ public class StudentEnrollInCourseCommandHandler : IRequestHandler<StudentEnroll
         
         _umsContext.SaveChanges();
 
+        
         var studentInvolved = _umsContext.Users.FirstOrDefault(x => x.Id == res.Entity.StudentId & x.RoleId == 3);
-        var courseInvolved = _umsContext.Courses.FirstOrDefault(x => x.Id == classAndTeacherFound.CourseId);
-        if (studentInvolved != null & courseInvolved != null)
+    
+        if (studentInvolved != null & studentInvolved.EnableNotifications == 1)
         {
-            MailRequest c = new MailRequest()
+
+            var courseInvolved = _umsContext.Courses.FirstOrDefault(x => x.Id == classAndTeacherFound.CourseId);
+            if ( courseInvolved != null)
             {
-                ToEmail = studentInvolved.Email,
-                Subject = courseInvolved.Name,
-                Body = "Welcome to the class!!",
-            };
-            await _mailService.SendEmailAsync(c);
+                MailRequest c = new MailRequest()
+                {
+                    ToEmail = studentInvolved.Email,
+                    Subject = courseInvolved.Name,
+                    Body = "Welcome to the class!!",
+                };
+                await _mailService.SendEmailAsync(c);
+            }
         }
 
-        
-        
+
         StudentEnrollInCourseDto response = new StudentEnrollInCourseDto()
         {
             StudentId = res.Entity.StudentId,
