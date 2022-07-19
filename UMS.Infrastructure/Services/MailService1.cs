@@ -30,7 +30,7 @@ public class MailService1 : IMailService1
         email.Body = builder.ToMessageBody();
         using var smtp = new SmtpClient();
         smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-        smtp.Authenticate("donna.turcotte42@ethereal.email", "7bwHEf7MEZrMD3TjTV");
+        smtp.Authenticate("eldora8@ethereal.email", "zSMWpBxYj2ncbzxmSf");
         await smtp.SendAsync(email);
         smtp.Disconnect(true);
     }

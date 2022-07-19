@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Models;
+using AutoMapper;
 using Domain.Models;
 using UMS.Persistence.Models;
 

@@ -1,8 +1,6 @@
-﻿using Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 
-namespace Application.User.Commands.SendEmail;
+namespace Application.Services.SendEmail;
 
 public class SendEmailCommand : IRequest<string>
 {

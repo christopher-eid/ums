@@ -1,13 +1,10 @@
-﻿using Application.User.Commands.AdminCreateCourse;
-using AutoMapper;
-using Domain.Models;
+﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using UMS.Infrastructure.Abstraction.Interfaces;
 using UMS.Infrastructure.Abstraction.Models;
 using UMS.Persistence.Models;
 
-namespace Application.User.Commands.SendEmail;
+namespace Application.Services.SendEmail;
 
 public class SendEmailCommandHandler : IRequestHandler<SendEmailCommand,string >
 {

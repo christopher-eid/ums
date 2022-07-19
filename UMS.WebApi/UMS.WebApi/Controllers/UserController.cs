@@ -1,6 +1,7 @@
 
+using Application.Services.PushNotification;
+using Application.Services.SendEmail;
 using Application.User.Commands.AdminCreateCourse;
-using Application.User.Commands.SendEmail;
 using Application.User.Commands.StudentEnrollInCourse;
 using Application.User.Commands.TeacherAssignCourseToTime;
 using Application.User.Commands.TeacherCreateTimeSlot;
@@ -18,10 +19,10 @@ namespace UMS.WebApi.Controllers;
 public class UserController : BaseController
 {
 
-    public UserController(IMediator mediator, IMailService1 mailService1)
+    public UserController(IMediator mediator)
     {
         _mediator = mediator;
-        _mailService1 = mailService1;
+      
     }
 
 
@@ -127,8 +128,8 @@ public class UserController : BaseController
     
     
     
-    [HttpPost("send")]
-    public async Task<string> SendMail([FromForm] SendEmailCommand request)
+    [HttpPost("TestMailAndPushNotification")]
+    public async Task<IActionResult> TestMailAndPushNotification([FromForm] SendEmailCommand request)
     {
         
         var result = await _mediator.Send(new SendEmailCommand()
@@ -138,7 +139,16 @@ public class UserController : BaseController
            Body = request.Body
         });
 
-        return result;
+
+        var result1 = await _mediator.Send(new PushNotificationCommand()
+        {
+            AppSectionThatSentTheNotification = "Testing Notification",
+            Message = "Hello world of notifications!"
+        });
+        
+        
+        return Ok(result1);
+        
     }
     
     

@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions;
+using Application.Models;
 using AutoMapper;
 using Domain.Models;
 using MediatR;

@@ -1,7 +1,4 @@
-﻿using NpgsqlTypes;
-using UMS.Persistence.Models;
-
-namespace Domain.Models
+﻿namespace Application.Models
 {
     public class TeacherCourseDto
     {
