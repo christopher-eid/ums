@@ -34,6 +34,7 @@ IConfiguration configuration = builder.Configuration;
 builder.Services.Configure<MailSettings1>( configuration.GetSection("MailSettings1"));
 builder.Services.AddTransient<IMailService1, MailService1>();
 
+//to configure signalR
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IChatHub, ChatHub>();
 
@@ -52,7 +53,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 var app = builder.Build();
 
-
+//configure path for signalR
 app.MapHub<ChatHub>("/chatHub");
 
 

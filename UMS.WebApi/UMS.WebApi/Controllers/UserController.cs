@@ -118,15 +118,6 @@ public class UserController : BaseController
     
     
     
-    /*
-    [HttpPost("UserSignUp")]
-    public async Task<IActionResult> UserSignUp(StudentEnrollInCourseCommand request)
-    {
-       Key
-    }
-    */
-    
-    
     
     [HttpPost("TestMailAndPushNotification")]
     public async Task<IActionResult> TestMailAndPushNotification([FromForm] SendEmailCommand request)
@@ -150,6 +141,10 @@ public class UserController : BaseController
         return Ok(result1);
         
     }
+    
+    
+    //CREATE ENABLE AND DISABLE NOTIFICATION PATHS
+    
     
     
     /* JSON example for testing teacherRegisterCourse on swagger
