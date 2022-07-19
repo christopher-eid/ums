@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.Models;
+using Domain.Models;
 using MediatR;
 
 namespace Application.User.Commands.TeacherRegisterCourse;

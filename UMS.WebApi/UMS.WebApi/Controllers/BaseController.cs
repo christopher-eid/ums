@@ -7,5 +7,4 @@ namespace UMS.WebApi.Controllers;
 public class BaseController : ControllerBase
 {
     public IMediator _mediator;
-    public IMailService1 _mailService1;
 }
