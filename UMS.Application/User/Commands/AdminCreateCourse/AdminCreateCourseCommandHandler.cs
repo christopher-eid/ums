@@ -1,4 +1,5 @@
-﻿using Application.Models;
+﻿using Application.Exceptions;
+using Application.Models;
 using AutoMapper;
 using Domain.Models;
 using MediatR;
@@ -22,6 +23,15 @@ public class AdminCreateCourseCommandHandler : IRequestHandler<AdminCreateCourse
 
     public async Task<CourseDto> Handle(AdminCreateCourseCommand request, CancellationToken cancellationToken)
     {
+        
+        
+        
+        var validAdmin = _umsContext.Users.FirstOrDefault(x => x.Id == request.AdminId & x.RoleId == 1);
+
+        if (validAdmin == null)
+        {
+            throw new InvalidIdentifierException("Provided Admin ID is invalid");
+        }
         
         //create a npsql range using lower and upper bound entered by admin
         NpgsqlRange<DateOnly>? enrolmentDateRange = new NpgsqlRange<DateOnly>(DateOnly.FromDateTime(request.LowerBound), DateOnly.FromDateTime(request.UpperBound));

@@ -21,7 +21,7 @@ public class MailService1 : IMailService1
     {
         var email = new MimeMessage();
        // email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
-       email.Sender = MailboxAddress.Parse("donna.turcotte42@ethereal.email");
+       email.Sender = MailboxAddress.Parse("carlos54alberto@outlook.com");
         email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
         email.Subject = mailRequest.Subject;
         var builder = new BodyBuilder();
@@ -29,8 +29,8 @@ public class MailService1 : IMailService1
         builder.HtmlBody = mailRequest.Body;
         email.Body = builder.ToMessageBody();
         using var smtp = new SmtpClient();
-        smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-        smtp.Authenticate("eldora8@ethereal.email", "zSMWpBxYj2ncbzxmSf");
+        smtp.Connect("smtp.office365.com", 587, SecureSocketOptions.StartTls);
+        smtp.Authenticate("carlos54alberto@outlook.com", "Carlos@54");
         await smtp.SendAsync(email);
         smtp.Disconnect(true);
     }
