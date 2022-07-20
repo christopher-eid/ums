@@ -4,6 +4,8 @@ using Application.User.Commands.TeacherRegisterCourse;
 using AutoMapper;
 using Domain.Models;
 using MediatR;
+using UMS.Infrastructure.Abstraction.Interfaces;
+using UMS.Infrastructure.Abstraction.Models;
 using UMS.Persistence.Models;
 
 namespace Application.User.Commands.TeacherAssignCourseToTime;
@@ -14,10 +16,14 @@ public class TeacherAssignCourseToTimeCommandHandler : IRequestHandler<TeacherAs
 
     private readonly IMapper _mapper;
 
-    public TeacherAssignCourseToTimeCommandHandler( UmsContext umsContext, IMapper mapper)
+    private readonly IChatHub _chatHub;
+    private readonly IMailService1 _mailService1;
+    public TeacherAssignCourseToTimeCommandHandler( UmsContext umsContext, IMapper mapper, IChatHub chatHub, IMailService1 mailService1)
     {
         _umsContext = umsContext;
         _mapper = mapper;
+        _chatHub = chatHub;
+        _mailService1 = mailService1;
     }
 
     public async Task<CourseSessionDto> Handle(TeacherAssignCourseToTimeCommand request, CancellationToken cancellationToken)
@@ -52,6 +58,13 @@ public class TeacherAssignCourseToTimeCommandHandler : IRequestHandler<TeacherAs
         {
             throw new NotPossibleException("You did not register this time slot");
         }
+
+
+        if (existingCourseAndTeacher.TeacherId != request.TeacherId)
+        {
+            throw new NotPossibleException("You are not the corresponding teacher of this course");
+        }
+        
         
         
         TeacherPerCoursePerSessionTime newCourseToTimeSlot = _mapper.Map<TeacherPerCoursePerSessionTime>(request);
@@ -66,6 +79,48 @@ public class TeacherAssignCourseToTimeCommandHandler : IRequestHandler<TeacherAs
         CourseSessionDto detailsToReturn = _mapper.Map<CourseSessionDto>(response.Entity);
 
 
+        
+        
+        
+        
+        
+        //sending mail and push notification to all students t 
+        
+        
+        var concernedCourse = _umsContext.Courses.FirstOrDefault(x => x.Id == existingCourseAndTeacher.CourseId);
+        var concernedTeacher = _umsContext.Users.FirstOrDefault(x => x.Id == existingCourseAndTeacher.TeacherId);
+
+
+        
+        
+        Task t = _chatHub.SendMessage("Admin Course Creation", "A new course has been added");
+        
+        var studentsWithEnableNotifications =  _umsContext.Users.Where(x => x.EnableNotifications == 1 & x.RoleId==3).ToList();
+        
+        foreach (var VARIABLE in studentsWithEnableNotifications)
+        {
+            MailRequest c = new MailRequest()
+            {
+                ToEmail = VARIABLE.Email,
+                Subject = "New Session time for course",
+                Body = "Dear Student " + VARIABLE.Name + ", " + "\n" + "This email is to inform you that the course - " 
+                       + concernedCourse.Name + " - will be given by the instructor " + concernedTeacher.Name + " from " + existingTimeSlot.StartTime + " to " + existingTimeSlot.EndTime 
+            };
+            await _mailService1.SendEmailAsync(c);
+            
+            
+            
+           
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
         return detailsToReturn;
 
     }
