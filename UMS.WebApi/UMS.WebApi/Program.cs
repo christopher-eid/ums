@@ -13,8 +13,6 @@ using UMS.Infrastructure;
 using UMS.Infrastructure.Abstraction.Interfaces;
 using UMS.Infrastructure.Services;
 using UMS.Persistence.Models;
-using UMS.WebApi;
-using UMS.WebApi.Behaviors;
 using UMS.WebApi.Configurations;
 using UMS.WebApi.Middleware;
 
