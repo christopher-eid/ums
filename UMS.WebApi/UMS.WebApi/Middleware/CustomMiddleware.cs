@@ -11,15 +11,7 @@ public class CustomMiddleware
 
     public Task Invoke(HttpContext httpContext)
     {
-        Console.WriteLine("Date: " + DateTime.Now.ToLongDateString());
+        Console.WriteLine("THIS IS MY MIDDLEWARE -- I AM ALWAYS BEFORE EACH REQUEST U SEND!");
         return _next(httpContext);
-    }
-}
-
-public static class CustomMiddlewareExtensions
-{
-    public static IApplicationBuilder UseDateLogMiddleware(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<CustomMiddleware>();
     }
 }
