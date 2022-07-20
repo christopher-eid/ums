@@ -13,12 +13,12 @@ public class StudentEnrollInCourseCommandHandler : IRequestHandler<StudentEnroll
 {
     private readonly UmsContext _umsContext;
     private readonly IMapper _mapper;
-    private readonly IMailService1 _mailService;
+    private readonly IMailService1 _mailService1;
     public StudentEnrollInCourseCommandHandler(UmsContext db, IMapper mapper, IMailService1 mailservice)
     {
         _umsContext = db;
         _mapper = mapper;
-        _mailService = mailservice;
+        _mailService1 = mailservice;
     }
    
 
@@ -80,7 +80,7 @@ public class StudentEnrollInCourseCommandHandler : IRequestHandler<StudentEnroll
                     Subject = courseInvolved.Name,
                     Body = "Welcome to the class!!",
                 };
-                await _mailService.SendEmailAsync(c);
+                await _mailService1.SendEmailAsync(c);
             }
         }
 

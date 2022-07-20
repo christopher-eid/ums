@@ -13,7 +13,7 @@ using UMS.Infrastructure.Abstraction.Interfaces;
 using UMS.Infrastructure.Services;
 using UMS.Persistence.Models;
 using UMS.WebApi;
-
+using UMS.WebApi.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +72,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<CustomMiddleware>();
 
 app.MapControllers();
 
