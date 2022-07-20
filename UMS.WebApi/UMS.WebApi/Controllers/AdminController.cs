@@ -1,4 +1,6 @@
-﻿using Application.User.Commands.AdminCreateCourse;
+﻿using Application.Models;
+using Application.User.Commands.AdminCreateCourse;
+using Application.User.Commands.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +17,23 @@ public class AdminController : BaseController
 
     }
 
+    
+    [HttpPost("SignUp")]
+    public async Task<IActionResult> AdminSignUp([FromBody] SignUpInfoDto request)
+    {
+       
+        
+        
+        var result = await _mediator.Send(new SignUpCommand()
+        {
+            Name = request.Name,
+            Email = request.Email,
+            RoleId = 1
+        });
+
+        return Ok(result);
+    }
+    
 
     [HttpPost("AdminCreateCourse")]
     public async Task<IActionResult> AdminCreateCourse([FromBody] AdminCreateCourseCommand request)

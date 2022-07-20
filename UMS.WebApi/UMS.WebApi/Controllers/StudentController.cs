@@ -1,4 +1,6 @@
-﻿using Application.User.Commands.StudentDisableNotification;
+﻿using Application.Models;
+using Application.User.Commands.SignUp;
+using Application.User.Commands.StudentDisableNotification;
 using Application.User.Commands.StudentEnableNotification;
 using Application.User.Commands.StudentEnrollInCourse;
 using MediatR;
@@ -15,6 +17,25 @@ public class StudentController : BaseController
     {
         _mediator = mediator;
 
+    }
+
+    
+    
+    
+    [HttpPost("SignUp")]
+    public async Task<IActionResult> AdminSignUp([FromBody] SignUpInfoDto request)
+    {
+       
+        
+        
+        var result = await _mediator.Send(new SignUpCommand()
+        {
+            Name = request.Name,
+            Email = request.Email,
+            RoleId = 3
+        });
+
+        return Ok(result);
     }
 
     

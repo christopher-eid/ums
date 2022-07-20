@@ -10,12 +10,12 @@ public class StudentEnableNotificationCommandHandler : IRequestHandler<StudentEn
 {
     private readonly UmsContext _umsContext;
 
-    private readonly IMapper _mapper;
+    
 
-    public StudentEnableNotificationCommandHandler( UmsContext umsContext, IMapper mapper)
+    public StudentEnableNotificationCommandHandler( UmsContext umsContext)
     {
         _umsContext = umsContext;
-        _mapper = mapper;
+        
     }
 
     public async Task<string> Handle(StudentEnableNotificationCommand request, CancellationToken cancellationToken)

@@ -1,4 +1,6 @@
-﻿using Application.User.Commands.TeacherAssignCourseToTime;
+﻿using Application.Models;
+using Application.User.Commands.SignUp;
+using Application.User.Commands.TeacherAssignCourseToTime;
 using Application.User.Commands.TeacherCreateTimeSlot;
 using Application.User.Commands.TeacherRegisterCourse;
 using MediatR;
@@ -16,6 +18,24 @@ public class TeacherController : BaseController
         _mediator = mediator;
 
     }
+    
+    
+    
+    
+    [HttpPost("SignUp")]
+    public async Task<IActionResult> AdminSignUp([FromBody] SignUpInfoDto request)
+    {
+       
+        var result = await _mediator.Send(new SignUpCommand()
+        {
+            Name = request.Name,
+            Email = request.Email,
+            RoleId = 2
+        });
+
+        return Ok(result);
+    }
+
     
     [HttpPost("TeacherRegisterCourse")]
     public async Task<IActionResult> TeacherRegisterCourse([FromBody] TeacherRegisterCourseCommand request)
