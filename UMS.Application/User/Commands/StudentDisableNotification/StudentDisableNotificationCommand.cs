@@ -6,6 +6,6 @@ namespace Application.User.Commands.StudentDisableNotification;
 
 public class StudentDisableNotificationCommand: IRequest<string>
 {
-    [Required]
+    [Required(ErrorMessage = "Student ID is required")]
     public long StudentId { get; set; }
 }
