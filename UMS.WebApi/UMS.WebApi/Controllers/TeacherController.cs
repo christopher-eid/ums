@@ -37,6 +37,7 @@ public class TeacherController : BaseController
     {
         var result = await _mediator.Send(new TeacherCreateTimeSlotCommand()
         {
+            TeacherId = request.TeacherId,
             StartTime = request.StartTime,
             EndTime = request.EndTime
         });
@@ -50,6 +51,7 @@ public class TeacherController : BaseController
     {
         var result = await _mediator.Send(new TeacherAssignCourseToTimeCommand()
         {
+            TeacherId = request.TeacherId,
             TeacherPerCourseId = request.TeacherPerCourseId,
             SessionTimeId = request.SessionTimeId
         });

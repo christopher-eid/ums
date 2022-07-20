@@ -23,11 +23,22 @@ public class TeacherAssignCourseToTimeCommandHandler : IRequestHandler<TeacherAs
     public async Task<CourseSessionDto> Handle(TeacherAssignCourseToTimeCommand request, CancellationToken cancellationToken)
     {
         
-        long newTeacherPerCourseId = request.TeacherPerCourseId;
-        
-        long newSessionTimeId = request.SessionTimeId;
         
         
+        //teacher authorization based on provided ID
+        var existingTeacher = _umsContext.Users.FirstOrDefault(x => x.Id == request.TeacherId & x.RoleId == 2);
+
+        if (existingTeacher == null)
+        {
+            throw new InvalidIdentifierException("Provided ID is not valid");
+        }
+
+        
+        
+       
+        long newTeacherPerCourseId = (long)request.TeacherPerCourseId;  //i had to put the command attributes as nullable in order to use required with decorators
+                                                                         //so here i switched it back to long instead of long?
+        long newSessionTimeId = (long)request.SessionTimeId;
         
         
         var existingCourseAndTeacher = _umsContext.TeacherPerCourses.FirstOrDefault(x => x.Id == request.TeacherPerCourseId);
@@ -43,12 +54,6 @@ public class TeacherAssignCourseToTimeCommandHandler : IRequestHandler<TeacherAs
         }
         
         
-        /*var config1 = new MapperConfiguration(cfg =>
-            cfg.CreateMap<TeacherAssignCourseToTimeCommand, TeacherPerCoursePerSessionTime>()
-        );*/
-        
-        
-        /*var mapper1 = new AutoMapper.Mapper(config1);*/
         TeacherPerCoursePerSessionTime newCourseToTimeSlot = _mapper.Map<TeacherPerCoursePerSessionTime>(request);
 
 
@@ -57,12 +62,6 @@ public class TeacherAssignCourseToTimeCommandHandler : IRequestHandler<TeacherAs
         
         _umsContext.SaveChanges();
         
-        /*var config = new MapperConfiguration(cfg =>
-            cfg.CreateMap<TeacherPerCoursePerSessionTime, CourseSessionDto>()
-        );
-        
-        
-        var mapper = new AutoMapper.Mapper(config);*/
         
         CourseSessionDto detailsToReturn = _mapper.Map<CourseSessionDto>(response.Entity);
 

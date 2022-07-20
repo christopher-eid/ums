@@ -22,13 +22,18 @@ public class TeacherCreateTimeSlotCommandHandler : IRequestHandler<TeacherCreate
     public async Task<TeacherSessionDto> Handle(TeacherCreateTimeSlotCommand request, CancellationToken cancellationToken)
     {
         
-        /*
-        var config1 = new MapperConfiguration(cfg =>
-            cfg.CreateMap<TeacherCreateTimeSlotCommand, SessionTime>()
-        );
         
+        //teacher authorization based on provided ID
+        var existingTeacher = _umsContext.Users.FirstOrDefault(x => x.Id == request.TeacherId & x.RoleId == 2);
+
+        if (existingTeacher == null)
+        {
+            throw new InvalidIdentifierException("Provided ID is not valid");
+        }
+
+
         
-        var mapper1 = new AutoMapper.Mapper(config1);*/
+        //mapping
         SessionTime sessionToAdd = _mapper.Map<SessionTime>(request);
 
         

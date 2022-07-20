@@ -8,9 +8,9 @@ namespace Application.User.Commands.TeacherRegisterCourse;
 public class TeacherRegisterCourseCommand : IRequest<TeacherCourseDto>
 {
     [Required(ErrorMessage = "Teacher ID is required")]
-    public long TeacherId { get; set; }
+    public long? TeacherId { get; set; }
     
     [Required(ErrorMessage = "Course ID is required")]
-    public long CourseId { get; set; }
+    public long? CourseId { get; set; }
     
 }

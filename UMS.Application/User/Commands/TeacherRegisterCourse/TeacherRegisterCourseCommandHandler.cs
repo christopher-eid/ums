@@ -20,18 +20,24 @@ public class TeacherRegisterCourseCommandHandler : IRequestHandler<TeacherRegist
 
     public async Task<TeacherCourseDto> Handle(TeacherRegisterCourseCommand request, CancellationToken cancellationToken)
     {
+        
+        //checking if course exists
         var existingCourse = _umsContext.Courses.FirstOrDefault(x => x.Id == request.CourseId);
         if (existingCourse == null)
         {
             throw new AlreadyExistingException("Incorrect Course ID");
         }
         
+        
+        //teacher authorization based on provided ID
         var existingTeacher = _umsContext.Users.FirstOrDefault(x => x.Id == request.TeacherId & x.RoleId == 2);
         if (existingTeacher == null)
         {
             throw new InvalidIdentifierException("Incorrect ID");
         }
 
+        
+        //checking if registration already exists
         var alreadyReg =
             _umsContext.TeacherPerCourses.FirstOrDefault(x =>
                 x.CourseId == request.CourseId & x.TeacherId == request.CourseId);
@@ -43,8 +49,8 @@ public class TeacherRegisterCourseCommandHandler : IRequestHandler<TeacherRegist
         
         TeacherPerCourse newTeacherPerCourse = new TeacherPerCourse()
         {
-            TeacherId = request.TeacherId,
-            CourseId = request.CourseId
+            TeacherId = (long)request.TeacherId, //i had to put the command attributes as nullable in order to use required with decorators
+            CourseId = (long)request.CourseId    //so here i switched it back to long instead of long?
         };
 
         var newTeacherPerCourseResponse = await _umsContext.TeacherPerCourses.AddAsync(newTeacherPerCourse);
