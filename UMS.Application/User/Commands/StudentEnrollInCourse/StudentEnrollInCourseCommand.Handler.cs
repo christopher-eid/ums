@@ -39,6 +39,14 @@ public class StudentEnrollInCourseCommandHandler : IRequestHandler<StudentEnroll
             throw new InvalidIdentifierException("Invalid ID");
         }
 
+        
+        var alreadyEnrolled = _umsContext.ClassEnrollments.FirstOrDefault(x => x.StudentId == request.StudentId & x.ClassId == request.ClassId);
+
+        if (alreadyEnrolled != null)
+        {
+            throw new AlreadyEnrolledException("You have already enrolled in this course");
+        }
+        
         DateTime dateAndTimeRegistered = DateTime.Now;
         DateOnly dateRegistered = DateOnly.FromDateTime(dateAndTimeRegistered);
         //find if the course we want has a valid enrollment date
