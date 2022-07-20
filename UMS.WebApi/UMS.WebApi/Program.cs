@@ -9,10 +9,13 @@ using MediatR;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
+using UMS.Infrastructure;
 using UMS.Infrastructure.Abstraction.Interfaces;
 using UMS.Infrastructure.Services;
 using UMS.Persistence.Models;
 using UMS.WebApi;
+using UMS.WebApi.Behaviors;
+using UMS.WebApi.Configurations;
 using UMS.WebApi.Middleware;
 
 
@@ -40,8 +43,7 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<IChatHub, ChatHub>();
 
 //to configure serilog
-
-ConfigureLogging();
+SerilogConfiguration.ConfigureLogging();
 builder.Host.UseSerilog();
 
 /*
@@ -56,10 +58,21 @@ builder.Host.UseSerilog((ctx, lc) => lc
         AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6
     }));*/
 
+
+
+
+
 var app = builder.Build();
 
 //configure path for signalR
 app.MapHub<ChatHub>("/chatHub");
+
+
+//configure middleware used to log everytime an http request is sent
+
+app.UseMiddleware<CustomMiddleware>();
+
+
 
 
 // Configure the HTTP request pipeline.
@@ -73,44 +86,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseMiddleware<CustomMiddleware>();
 
 app.MapControllers();
 
 app.Run();
 
 
-
-
-void ConfigureLogging()
-{
-    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-    var configuration1 = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile(
-            $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-            optional: true)
-        .Build();
-
-    Log.Logger = new LoggerConfiguration()
-        .Enrich.FromLogContext()
-        .Enrich.WithExceptionDetails()
-        .WriteTo.Debug()
-        .WriteTo.Console()
-        .WriteTo.Elasticsearch(ConfigureElasticSink(configuration1, environment))
-        .Enrich.WithProperty("Environment", environment)
-        .ReadFrom.Configuration(configuration1)
-        .CreateLogger();
-}
-
-ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration1, string environment)
-{
-    return new ElasticsearchSinkOptions(new Uri(configuration1["ElasticConfiguration:Uri"]))
-    {
-        AutoRegisterTemplate = true,
-        IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
-    };
-}
 
 
 

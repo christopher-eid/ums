@@ -1,4 +1,4 @@
-﻿namespace UMS.WebApi;
+﻿namespace UMS.Infrastructure;
 
 public class MailSettings1
 {
