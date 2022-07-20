@@ -7,12 +7,13 @@ using AutoMapper;
 using MailKit;
 using MediatR;
 using Serilog;
+using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 using UMS.Infrastructure.Abstraction.Interfaces;
 using UMS.Infrastructure.Services;
 using UMS.Persistence.Models;
 using UMS.WebApi;
-using LoggerExtensions = Serilog.LoggerExtensions;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,8 +39,12 @@ builder.Services.AddTransient<IMailService1, MailService1>();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IChatHub, ChatHub>();
 
+//to configure serilog
 
+ConfigureLogging();
+builder.Host.UseSerilog();
 
+/*
 builder.Host.UseSerilog((ctx, lc) => lc
     .MinimumLevel.Information() //set to error if we want only error level
     .Enrich.FromLogContext()
@@ -49,7 +54,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200") ){
         AutoRegisterTemplate = true,
         AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6
-    }));
+    }));*/
 
 var app = builder.Build();
 
@@ -75,12 +80,10 @@ app.Run();
 
 
 
-
-/*
 void ConfigureLogging()
 {
     var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-    var configuration = new ConfigurationBuilder()
+    var configuration1 = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddJsonFile(
             $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
@@ -92,24 +95,20 @@ void ConfigureLogging()
         .Enrich.WithExceptionDetails()
         .WriteTo.Debug()
         .WriteTo.Console()
-        .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
+        .WriteTo.Elasticsearch(ConfigureElasticSink(configuration1, environment))
         .Enrich.WithProperty("Environment", environment)
-        .ReadFrom.Configuration(configuration)
+        .ReadFrom.Configuration(configuration1)
         .CreateLogger();
 }
 
-ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment)
+ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration1, string environment)
 {
-    return new ElasticsearchSinkOptions(new Uri(configuration["ElasticConfiguration:Uri"]))
+    return new ElasticsearchSinkOptions(new Uri(configuration1["ElasticConfiguration:Uri"]))
     {
         AutoRegisterTemplate = true,
         IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
     };
 }
-*/
-
-
-
 
 
 
