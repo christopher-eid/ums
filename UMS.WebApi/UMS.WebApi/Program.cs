@@ -7,8 +7,6 @@ using AutoMapper;
 using MailKit;
 using MediatR;
 using Serilog;
-using Serilog.Exceptions;
-using Serilog.Sinks.Elasticsearch;
 using UMS.Infrastructure;
 using UMS.Infrastructure.Abstraction.Interfaces;
 using UMS.Infrastructure.Services;
