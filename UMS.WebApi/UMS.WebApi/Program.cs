@@ -1,16 +1,17 @@
 
 
-using System.Configuration;
+
 using System.Reflection;
 using Application.User.Commands.AdminCreateCourse;
-using AutoMapper;
-using MailKit;
+
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using UMS.Infrastructure;
 using UMS.Infrastructure.Abstraction.Interfaces;
 using UMS.Infrastructure.Services;
 using UMS.Persistence.Models;
+using UMS.Persistence.Tenants;
 using UMS.WebApi.Configurations;
 using UMS.WebApi.Middleware;
 
@@ -25,8 +26,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddMediatR(typeof(AdminCreateCourseCommand).GetTypeInfo().Assembly);
-builder.Services.AddTransient<UmsContext>();
+//builder.Services.AddScoped<UmsContext>();   //put it back when done multitaneny
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.Load("UMS.Application"));
+
+
+
 
 
 //to configure mail service
@@ -57,18 +61,44 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 
 
+//register service needed for multitenancy
+builder.Services.AddScoped<ITenantService, TenantService>();
+
+//register middleware for multitenancy
+builder.Services.AddScoped<MultiTenantServiceMiddleware>();
+
+builder.Services.AddDbContext<UmsContext>((s, o) =>
+{
+    Tenant tenant = s.GetService<ITenantService>().GetTenant();
+    // for migrations
+    var connectionString = tenant?.ConnectionString ?? "Host=localhost;Port=5432;Database=defaultums;Username=postgres;Password=123456";
+    // multi-tenant databases
+    o.UseNpgsql(connectionString);
+});
+
+
+
+
+
+
+
+
+
 
 var app = builder.Build();
+
+
+//configure migration for multitenancy
+await MigrationConfiguration.Initialize(app);
 
 //configure path for signalR
 app.MapHub<ChatHub>("/chatHub");
 
-
 //configure middleware used to log everytime an http request is sent
-
 app.UseMiddleware<CustomMiddleware>();
 
-
+//configure middleware used for multitenancy
+app.UseMiddleware<MultiTenantServiceMiddleware>();
 
 
 // Configure the HTTP request pipeline.
@@ -86,7 +116,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
 
 
 

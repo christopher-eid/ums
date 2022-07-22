@@ -11,7 +11,7 @@ public class CustomMiddleware
 
     public Task Invoke(HttpContext httpContext)
     {
-        Console.WriteLine("THIS IS MY MIDDLEWARE -- I AM ALWAYS BEFORE EACH REQUEST U SEND!");
+        Console.WriteLine("\n\nTHIS IS MY MIDDLEWARE -- I AM ALWAYS BEFORE EACH REQUEST U SEND!\n\n");
         return _next(httpContext);
     }
 }

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
+using UMS.Persistence.Tenants;
 
 namespace UMS.Persistence.Models
 {
     public partial class UmsContext : DbContext
     {
+
         public UmsContext()
         {
         }
@@ -25,6 +30,11 @@ namespace UMS.Persistence.Models
         public virtual DbSet<TeacherPerCoursePerSessionTime> TeacherPerCoursePerSessionTimes { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
+        
+        
+        
+        
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -32,8 +42,13 @@ namespace UMS.Persistence.Models
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=ums;Username=postgres;Password=123456");
             }
+            
+            
         }
+        */
 
+        
+        /*
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ClassEnrollment>(entity =>
@@ -170,6 +185,6 @@ namespace UMS.Persistence.Models
             OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);*/
     }
 }

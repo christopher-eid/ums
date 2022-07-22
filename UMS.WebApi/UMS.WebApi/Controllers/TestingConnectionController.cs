@@ -1,5 +1,6 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Npgsql;
+
 
 namespace UMS.WebApi.Controllers;
 
@@ -14,8 +15,9 @@ public class TestingConnectionController : BaseController
     }
 
     [HttpGet("TestConnection")]
-    public async Task<string> TestConnection()
+    public async Task<string> TestConnection([FromHeader] long tenant)
     {
+  
         return "hello";
     }
 
