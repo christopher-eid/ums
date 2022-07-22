@@ -20,6 +20,18 @@ public class GetAllStudentsInCourseQueryHandler : IRequestHandler<GetAllStudents
     public async Task<List<Domain.Models.User>> Handle(GetAllStudentsInCourseQuery request, CancellationToken cancellationToken)
     {
         
+        
+        var courseFound = _umsContext.Courses.FirstOrDefault(x => x.Id == request.CourseId);
+
+        if (courseFound == null)
+        {
+            throw new NotFoundException("Requested Course is not available");
+        }
+        
+        
+        
+        
+        
         var data = _umsContext.ClassEnrollments
             .Join(
                 _umsContext.TeacherPerCourses,
